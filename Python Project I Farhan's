@@ -1,0 +1,629 @@
+#Farhan Faseehuddin's Project 1 Full Code Version. 
+#Installing the libraries with the specified version
+!pip install numpy==1.5.3 matplotlib==3.7.1 seaborn==0.13.1 -q --user
+ERROR: Ignored the following versions that require a different python version: 1.21.2 Requires-Python >=3.7,<3.11; 1.21.3 Requires-Python >=3.7,<3.11; 1.21.4 Requires-Python >=3.7,<3.11; 1.21.5 Requires-Python >=3.7,<3.11; 1.21.6 Requires-Python >=3.7,<3.11
+ERROR: Could not find a version that satisfies the requirement numpy==1.5.3 (from versions: 1.3.0, 1.4.1, 1.5.0, 1.5.1, 1.6.0, 1.6.1, 1.6.2, 1.7.0, 1.7.1, 1.7.2, 1.8.0, 1.8.1, 1.8.2, 1.9.0, 1.9.1, 1.9.2, 1.9.3, 1.10.0.post2, 1.10.1, 1.10.2, 1.10.4, 1.11.0, 1.11.1, 1.11.2, 1.11.3, 1.12.0, 1.12.1, 1.13.0, 1.13.1, 1.13.3, 1.14.0, 1.14.1, 1.14.2, 1.14.3, 1.14.4, 1.14.5, 1.14.6, 1.15.0, 1.15.1, 1.15.2, 1.15.3, 1.15.4, 1.16.0, 1.16.1, 1.16.2, 1.16.3, 1.16.4, 1.16.5, 1.16.6, 1.17.0, 1.17.1, 1.17.2, 1.17.3, 1.17.4, 1.17.5, 1.18.0, 1.18.1, 1.18.2, 1.18.3, 1.18.4, 1.18.5, 1.19.0, 1.19.1, 1.19.2, 1.19.3, 1.19.4, 1.19.5, 1.20.0, 1.20.1, 1.20.2, 1.20.3, 1.21.0, 1.21.1, 1.22.0, 1.22.1, 1.22.2, 1.22.3, 1.22.4, 1.23.0rc1, 1.23.0rc2, 1.23.0rc3, 1.23.0, 1.23.1, 1.23.2, 1.23.3, 1.23.4, 1.23.5, 1.24.0rc1, 1.24.0rc2, 1.24.0, 1.24.1, 1.24.2, 1.24.3, 1.24.4, 1.25.0rc1, 1.25.0, 1.25.1, 1.25.2, 1.26.0b1, 1.26.0rc1, 1.26.0, 1.26.1, 1.26.2, 1.26.3, 1.26.4, 2.0.0b1, 2.0.0rc1, 2.0.0rc2)
+ERROR: No matching distribution found for numpy==1.5.3
+#importing the necessary packages that we need: 
+#These include pandas, numpy, matplotlib and seaborn
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+#I need to read the dataset and call it a name, here I just called it df. My separator is the quotes. 
+df=pd.read_csv("foodhub_order.csv",sep=",")
+df
+order_id	customer_id	restaurant_name	cuisine_type	cost_of_the_order	day_of_the_week	rating	food_preparation_time	delivery_time
+0	1477147	337525	Hangawi	Korean	30.75	Weekend	Not given	25	20
+1	1477685	358141	Blue Ribbon Sushi Izakaya	Japanese	12.08	Weekend	Not given	25	23
+2	1477070	66393	Cafe Habana	Mexican	12.23	Weekday	5	23	28
+3	1477334	106968	Blue Ribbon Fried Chicken	American	29.20	Weekend	3	25	15
+4	1478249	76942	Dirty Bird to Go	American	11.59	Weekday	4	25	24
+...	...	...	...	...	...	...	...	...	...
+1893	1476701	292602	Chipotle Mexican Grill $1.99 Delivery	Mexican	22.31	Weekend	5	31	17
+1894	1477421	397537	The Smile	American	12.18	Weekend	5	31	19
+1895	1477819	35309	Blue Ribbon Sushi	Japanese	25.22	Weekday	Not given	31	24
+1896	1477513	64151	Jack's Wife Freda	Mediterranean	12.18	Weekday	5	23	31
+1897	1478056	120353	Blue Ribbon Sushi	Japanese	19.45	Weekend	Not given	28	24
+1898 rows × 9 columns
+
+#here we can use the head command or code to find the first five rows of the data
+#I used the notes in lecture 2.15 to help me with this information. 
+df.head()
+order_id	customer_id	restaurant_name	cuisine_type	cost_of_the_order	day_of_the_week	rating	food_preparation_time	delivery_time
+0	1477147	337525	Hangawi	Korean	30.75	Weekend	Not given	25	20
+1	1477685	358141	Blue Ribbon Sushi Izakaya	Japanese	12.08	Weekend	Not given	25	23
+2	1477070	66393	Cafe Habana	Mexican	12.23	Weekday	5	23	28
+3	1477334	106968	Blue Ribbon Fried Chicken	American	29.20	Weekend	3	25	15
+4	1478249	76942	Dirty Bird to Go	American	11.59	Weekday	4	25	24
+#Question 1: How many rows and columns are present in the data?
+#We can use the code df.shape to check the number of columns and rows in the dataset. 
+#This was from 2.16
+df.shape
+# I got an error on this before, but then I removed the () and my code worked. 
+# Answer: In the dataset we have 1,898 rows and 9 columns
+(1898, 9)
+#Question 2: What are the datatypes of the different columns in the dataset? The info function can be used
+df.info()
+# I was checking my notes, and initially I wrote it without the paranthesis. It looked a little goofy, 
+#so I tried it with the paranthesis and it worked. 
+#From lecture 2.16
+#Answer: To answer the question there are three datatypes in this data, we have float, integer and object. 
+<class 'pandas.core.frame.DataFrame'>
+RangeIndex: 1898 entries, 0 to 1897
+Data columns (total 9 columns):
+ #   Column                 Non-Null Count  Dtype  
+---  ------                 --------------  -----  
+ 0   order_id               1898 non-null   int64  
+ 1   customer_id            1898 non-null   int64  
+ 2   restaurant_name        1898 non-null   object 
+ 3   cuisine_type           1898 non-null   object 
+ 4   cost_of_the_order      1898 non-null   float64
+ 5   day_of_the_week        1898 non-null   object 
+ 6   rating                 1898 non-null   object 
+ 7   food_preparation_time  1898 non-null   int64  
+ 8   delivery_time          1898 non-null   int64  
+dtypes: float64(1), int64(4), object(4)
+memory usage: 133.6+ KB
+#Question 3: Are there any missing values in the data? If yes, treat them using an appropriate method. 
+#Here we can use the is null function to find the missing values
+df.isnull()
+order_id	customer_id	restaurant_name	cuisine_type	cost_of_the_order	day_of_the_week	rating	food_preparation_time	delivery_time
+0	False	False	False	False	False	False	False	False	False
+1	False	False	False	False	False	False	False	False	False
+2	False	False	False	False	False	False	False	False	False
+3	False	False	False	False	False	False	False	False	False
+4	False	False	False	False	False	False	False	False	False
+...	...	...	...	...	...	...	...	...	...
+1893	False	False	False	False	False	False	False	False	False
+1894	False	False	False	False	False	False	False	False	False
+1895	False	False	False	False	False	False	False	False	False
+1896	False	False	False	False	False	False	False	False	False
+1897	False	False	False	False	False	False	False	False	False
+1898 rows × 9 columns
+
+#so I did not find any empty values in this dataset, but when I looked at the original it had missing values. 
+#But as you can see in the bottom, the mising values has been replaced using NaN, so I will state there are no
+#missing values. I came back after a little bit of time, and reloaded my dataset and renamed it just in case. 
+df_foodhub=pd.read_csv("foodhub_order.csv",sep=",")
+df_foodhub
+order_id	customer_id	restaurant_name	cuisine_type	cost_of_the_order	day_of_the_week	rating	food_preparation_time	delivery_time
+0	1477147	337525	Hangawi	Korean	30.75	Weekend	NaN	25	20
+1	1477685	358141	Blue Ribbon Sushi Izakaya	Japanese	12.08	Weekend	NaN	25	23
+2	1477070	66393	Cafe Habana	Mexican	12.23	Weekday	5.0	23	28
+3	1477334	106968	Blue Ribbon Fried Chicken	American	29.20	Weekend	3.0	25	15
+4	1478249	76942	Dirty Bird to Go	American	11.59	Weekday	4.0	25	24
+...	...	...	...	...	...	...	...	...	...
+1893	1476701	292602	Chipotle Mexican Grill $1.99 Delivery	Mexican	22.31	Weekend	5.0	31	17
+1894	1477421	397537	The Smile	American	12.18	Weekend	5.0	31	19
+1895	1477819	35309	Blue Ribbon Sushi	Japanese	25.22	Weekday	NaN	31	24
+1896	1477513	64151	Jack's Wife Freda	Mediterranean	12.18	Weekday	5.0	23	31
+1897	1478056	120353	Blue Ribbon Sushi	Japanese	19.45	Weekend	NaN	28	24
+1898 rows × 9 columns
+
+#Question 4, check the statistical summary of the data. What is the min, average, max time it takes for food
+#to be prepared once an order is placed?
+df_foodhub.describe()
+order_id	customer_id	cost_of_the_order	rating	food_preparation_time	delivery_time
+count	1.898000e+03	1898.000000	1898.000000	1162.000000	1898.000000	1898.000000
+mean	1.477496e+06	171168.478398	16.498851	4.344234	27.371970	24.161749
+std	5.480497e+02	113698.139743	7.483812	0.741478	4.632481	4.972637
+min	1.476547e+06	1311.000000	4.470000	3.000000	20.000000	15.000000
+25%	1.477021e+06	77787.750000	12.080000	4.000000	23.000000	20.000000
+50%	1.477496e+06	128600.000000	14.140000	5.000000	27.000000	25.000000
+75%	1.477970e+06	270525.000000	22.297500	5.000000	31.000000	28.000000
+max	1.478444e+06	405334.000000	35.410000	5.000000	35.000000	33.000000
+#For this I used the describe function, I found this using the sources pandas.pydata.org
+#The answers are in the following four lines: 
+#The average time it takes to prepare food (once it has been placed) is approximately 27.4 minutes (I rounded up). 
+#The minimum amount of food prepartion time is 20 minutes
+#The maximum amount of food prepartion time is 35 minutes 
+#The Standard Deviation of food prepartion time is close to 5 minutes (I rounded up, but the time is 4.6 minutes)
+#Question 5: How many orders are not rated?
+#First lets define not rated as empty in our dataset. 
+#I had a lot of problems with this code, but I also wanted to show the work that I felt was necessary to see
+#my steps. Skip down to Line 70 to see the code and the answer. 
+empty = df_foodhub[df.rating=='NaN']
+len(empty)
+0
+#This looks wrong so lets try this again
+# I need to define the not-rated, which is the Nan
+not_rated = df[df.rating=='NaN']
+len(not_rated)
+0
+#This looks wrong so lets try this again
+not_rated = df_foodhub[df.rating=='NaN']
+len(not_rated)
+0
+# I kept on getting 0 for the length not rated, so I wanted to see if my data was in there correctly. 
+# I noted that for rating I was getting a NaN number. 
+df_foodhub
+order_id	customer_id	restaurant_name	cuisine_type	cost_of_the_order	day_of_the_week	rating	food_preparation_time	delivery_time
+0	1477147	337525	Hangawi	Korean	30.75	Weekend	NaN	25	20
+1	1477685	358141	Blue Ribbon Sushi Izakaya	Japanese	12.08	Weekend	NaN	25	23
+2	1477070	66393	Cafe Habana	Mexican	12.23	Weekday	5.0	23	28
+3	1477334	106968	Blue Ribbon Fried Chicken	American	29.20	Weekend	3.0	25	15
+4	1478249	76942	Dirty Bird to Go	American	11.59	Weekday	4.0	25	24
+...	...	...	...	...	...	...	...	...	...
+1893	1476701	292602	Chipotle Mexican Grill $1.99 Delivery	Mexican	22.31	Weekend	5.0	31	17
+1894	1477421	397537	The Smile	American	12.18	Weekend	5.0	31	19
+1895	1477819	35309	Blue Ribbon Sushi	Japanese	25.22	Weekday	NaN	31	24
+1896	1477513	64151	Jack's Wife Freda	Mediterranean	12.18	Weekday	5.0	23	31
+1897	1478056	120353	Blue Ribbon Sushi	Japanese	19.45	Weekend	NaN	28	24
+1898 rows × 9 columns
+
+not_rated = df_foodhub[df.rating=='NaN']
+len(not_rated)
+0
+len('NaN')
+3
+# I am having a lot of problems with this, so lets try this a different way. Lets reload original data
+# I called it a foodhub order instead. 
+df_foodhuborder=pd.read_csv("foodhuborder.csv",sep=",")
+df_foodhuborder
+order_id	customer_id	restaurant_name	cuisine_type	cost_of_the_order	day_of_the_week	rating	food_preparation_time	delivery_time
+0	1477224	147468	Tamarind TriBeCa	Indian	25.22	Weekday	3	20	24
+1	1476693	41877	Cafe Mogador	Middle Eastern	29.10	Weekday	5	20	29
+2	1476889	149984	Sushi of Gari 46	Japanese	12.18	Weekday	Not given	20	29
+3	1477999	208020	Haru Gramercy Park	Japanese	29.83	Weekday	5	20	32
+4	1477243	176234	Prosperity Dumpling	Chinese	14.02	Weekend	5	20	30
+...	...	...	...	...	...	...	...	...	...
+1893	1478268	306119	Xi'an Famous Foods	Chinese	20.86	Weekend	4	35	26
+1894	1476923	50199	J. G. Melon	American	19.40	Weekday	4	35	26
+1895	1478148	261371	Shake Shack	American	22.31	Weekend	Not given	35	28
+1896	1477377	198802	DuMont Burger	American	12.56	Weekend	Not given	35	19
+1897	1477466	222734	Shake Shack	American	13.97	Weekend	5	35	27
+1898 rows × 9 columns
+
+df
+---------------------------------------------------------------------------
+NameError                                 Traceback (most recent call last)
+Cell In[66], line 1
+----> 1 df_foodhuborder
+
+NameError: name 'df_foodhuborder' is not defined
+not_rated = df_foodhuborder[df.rating=='Not given']
+len(not_rated)
+736
+# I went back and re-named everything to foodhuborder. I had a lot of problems with Question #5, it really screwed 
+#me up. But to answer this question 736 orders are not rated. 
+#The answer to question 5 is 736
+#Question 6: Explore all the variables and provide observations on their distributions
+#(generally, histograms, boxplots, countplots, etc are used for univariate exploration). 
+#From Lesson 2.16, we know that unique checks the number of unique values for the dataset. 
+df.nunique()
+order_id                 1898
+customer_id              1200
+restaurant_name           178
+cuisine_type               14
+cost_of_the_order         312
+day_of_the_week             2
+rating                      4
+food_preparation_time      16
+delivery_time              19
+dtype: int64
+#here we know that order_id and customer_id are the two largest variables in the dataset. 
+#The two smallest are rating and day of the week. 
+# we want a list of all the cuisine types in the dataset. 
+list(df.cuisine_type.unique())
+['Indian',
+ 'Middle Eastern',
+ 'Japanese',
+ 'Chinese',
+ 'American',
+ 'Italian',
+ 'Southern',
+ 'Mediterranean',
+ 'Vietnamese',
+ 'Spanish',
+ 'Mexican',
+ 'Korean',
+ 'Thai',
+ 'French']
+#we want to plot the number of orders, from high to low for each cuisine. 
+plt.figure(figsize(8,5))
+#the above code is how to plot, and the figuresize is how big we want the histogram to be
+cuisinex=sns.countplot(data=df, x='cuisine_type', order = df['cuisine_type'].value_counts().index)
+cuisinex=tick_params(axis='x', rotation=90)
+cuisinex.set(xlabel='')
+cuisinex.set(ylablel=' Number of orders ')
+plt.show()
+---------------------------------------------------------------------------
+NameError                                 Traceback (most recent call last)
+Cell In[77], line 2
+      1 #we want to plot the number of orders, from high to low for each cuisine. 
+----> 2 plt.figure(figsize(8,5))
+      3 #the above code is how to plot, and the figuresize is how big we want the histogram to be
+      4 cuisinex=sns.countplot(data=df, x='cuisine_type', order = df['cuisine_type'].value_counts().index)
+
+NameError: name 'plt' is not defined
+import matplotlib.pyplot as plt
+import seaborn as sns
+#plot histogram the number of orders, from low to high, for each customer ID
+ax = sns.histplot(df.customer_id.value_counts(), binwidth=1, binrange=(1,13))
+ax.set(xlabel="Number of orders per customer")
+ax.set(ylabel='Number of customers')
+plt.show()
+/opt/anaconda3/lib/python3.11/site-packages/seaborn/_oldcore.py:1119: FutureWarning: use_inf_as_na option is deprecated and will be removed in a future version. Convert inf values to NaN before operating instead.
+  with pd.option_context('mode.use_inf_as_na', True):
+No description has been provided for this image
+#I had some problems with this code, but I finally got it right. 
+#The histogram above shows the number of orders for each customer ID. This determines, 
+#who are the most popular customers and how much they order. 
+#create a histogram of the rating based on the cost of the order
+# I do not think I did this right. I wanted to see if there was a way to see if there was a correlation
+#between cost of order and rating. 
+rating = sns.histplot(df.rating.value_counts(), binwidth=5)
+rating.set(xlabel="Cost_of_the_order")
+rating.set(ylabel='Rating')
+plt.show()
+/opt/anaconda3/lib/python3.11/site-packages/seaborn/_oldcore.py:1119: FutureWarning: use_inf_as_na option is deprecated and will be removed in a future version. Convert inf values to NaN before operating instead.
+  with pd.option_context('mode.use_inf_as_na', True):
+No description has been provided for this image
+#we want to plot the number of orders, from high to low for each cuisine. 
+plt.figure(figsize=(8,5))
+#the above code is how to plot, and the figuresize is how big we want the histogram to be
+cuisinex=sns.countplot(data=df, x='cuisine_type', order = df['cuisine_type'].value_counts().index)
+cuisinex.tick_params(axis='x', rotation=90)
+cuisinex.set(xlabel='')
+cuisinex.set(ylabel=' Number of orders ')
+plt.show()
+No description has been provided for this image
+#the above is a histogram, with different colors on the number of orders based on the type of cuisine. 
+#According to the data, American food or cuisine is number one, with close to 600 orders. This is a right-skewed
+#Distribution. There are a couple of characteristics about this distribution, one is that the mean is greater than
+#the median. #2 is that this is a positive distribution. 
+#Here I want to see if more orders were placed on weekdays or weekends. 
+sns.countplot(data=df_foodhuborder, x='day_of_the_week')
+ax.set(xlabel='')
+ax.set(ylabel='Number of orders')
+plt.show()
+#Observation: more orders are placed on weekends than weekdays. 
+---------------------------------------------------------------------------
+NameError                                 Traceback (most recent call last)
+Cell In[55], line 3
+      1 #Here I want to see if more orders were placed on weekdays or weekends. 
+      2 sns.countplot(data=df_foodhuborder, x='day_of_the_week')
+----> 3 ax.set(xlabel='')
+      4 ax.set(ylabel='Number of orders')
+      5 plt.show()
+
+NameError: name 'ax' is not defined
+No description has been provided for this image
+#Here lets determine if we have higher ratings on the weekdays or weekends
+sns.catplot(x="rating", hue="day_of_the_week", data=df, kind="count")
+#Observation: The above demonstrates that most of the ratings were given on the weekends instead of the weekdays. 
+<seaborn.axisgrid.FacetGrid at 0x15ead9d50>
+No description has been provided for this image
+df_foodhuborder=pd.read_csv("foodhuborder.csv",sep=",")
+df_foodhuborder
+#I did this code just to re-familiarize myself with the data. I came back to it after a break. 
+order_id	customer_id	restaurant_name	cuisine_type	cost_of_the_order	day_of_the_week	rating	food_preparation_time	delivery_time
+0	1477224	147468	Tamarind TriBeCa	Indian	25.22	Weekday	3	20	24
+1	1476693	41877	Cafe Mogador	Middle Eastern	29.10	Weekday	5	20	29
+2	1476889	149984	Sushi of Gari 46	Japanese	12.18	Weekday	Not given	20	29
+3	1477999	208020	Haru Gramercy Park	Japanese	29.83	Weekday	5	20	32
+4	1477243	176234	Prosperity Dumpling	Chinese	14.02	Weekend	5	20	30
+...	...	...	...	...	...	...	...	...	...
+1893	1478268	306119	Xi'an Famous Foods	Chinese	20.86	Weekend	4	35	26
+1894	1476923	50199	J. G. Melon	American	19.40	Weekday	4	35	26
+1895	1478148	261371	Shake Shack	American	22.31	Weekend	Not given	35	28
+1896	1477377	198802	DuMont Burger	American	12.56	Weekend	Not given	35	19
+1897	1477466	222734	Shake Shack	American	13.97	Weekend	5	35	27
+1898 rows × 9 columns
+
+#We want to check the relationship between rating and food prepartion time
+plt.figure(figsize=(15,7))
+sns.pointplot(x='rating', y='food_preparation_time', data=df)
+plt.grid()
+plt.show()
+No description has been provided for this image
+print(top_3_customers)
+   customer_id  count
+0        52832     13
+1        47440     10
+2        83287      9
+#Observation: When it takes the time to prepare the food between 27 and 28 minutes, there is an increase in rating
+#Is there a relationship between cost of the order and rating?
+plt.figure(figsize=(14,8))
+sns.pointplot(data=df, x='rating', y='cost_of_the_order')
+plt.grid()
+plt.show()
+No description has been provided for this image
+#Observation: The costlier the order, the higher rated the order usually is. 
+#Which cuisine type has the highest rating
+sns.jointplot(data=df, x='rating', y='cuisine_type')
+/opt/anaconda3/lib/python3.11/site-packages/seaborn/_oldcore.py:1119: FutureWarning: use_inf_as_na option is deprecated and will be removed in a future version. Convert inf values to NaN before operating instead.
+  with pd.option_context('mode.use_inf_as_na', True):
+/opt/anaconda3/lib/python3.11/site-packages/seaborn/_oldcore.py:1119: FutureWarning: use_inf_as_na option is deprecated and will be removed in a future version. Convert inf values to NaN before operating instead.
+  with pd.option_context('mode.use_inf_as_na', True):
+<seaborn.axisgrid.JointGrid at 0x152a8ff90>
+No description has been provided for this image
+# Observations: We know that Thai food and Spanish food did not recieve a 3 rating. 
+#Also we can state that every type of food recieved a '5', '4', or a 'Not given rating'
+# From this we can also deduce that Indian, Middle Eastern and Japanese had the highest cuisine type ratings. 
+#For the next chart, we want to see if the volume of food has any affect on preparation time
+# depending if it is on the weekday or weekend?
+sns.catplot(x="food_preparation_time", hue="day_of_the_week", data=df, kind="count")
+<seaborn.axisgrid.FacetGrid at 0x152ec0290>
+No description has been provided for this image
+#Observations: According to the graph above, food has double amount of orders on the weekends, 
+#but it does take the same amount of time to prepare. 
+#Question 7: Which are the top 5 restaraunts in terms of the number of orders received?
+df.restaurant_name.value_counts().head(5)
+#Observations: The top 5 restaraunts w/number of orders received are: 
+#Shake Shack, The Meatball Shop, Blue Ribbon, Sushi, Blue Ribbon Fried Chicken, and Parm. 
+restaurant_name
+Shake Shack                  219
+The Meatball Shop            132
+Blue Ribbon Sushi            119
+Blue Ribbon Fried Chicken     96
+Parm                          68
+Name: count, dtype: int64
+#Question 8: Which is the most popular cuisine on the weekends?
+#here we create a subset of the dataframe for the weekend orders, then provides the number of orders from 
+#top 5 cuisine on the weekends. 
+df2=df[df.day_of_the_week=='Weekend']
+df2.cuisine_type.value_counts().head(5)
+#Observations: The most popular cuisine on the weekends are (from highest to lowest): American, Japanese, 
+#Italian, Chinese, Mexican
+cuisine_type
+American    415
+Japanese    335
+Italian     207
+Chinese     163
+Mexican      53
+Name: count, dtype: int64
+#Question 9: What Percentage of the orders cost more than $20 
+round(len(df[df.cost_of_the_order>20])/len(df)*100,1)
+#Observation: 29.2% of all orders cost more than $20
+29.2
+#Question 10: What is the mean order of delivery time
+round(df.delivery_time.mean(),1)
+#Observation: The mean order of delivery time is just over 24 minutes. 
+24.2
+#Question 11: The company has decided to give 20% discount vouchers to the top 3 most frequent customers. 
+#Find the ID's of these customers and the number of orders they placed
+#First define the first the top three customers
+top_3_customers = df['customer_id'].value_counts().sort_values(ascending = False).head(3).reset_index()
+#Observation: the customer ids that are the most frequent are: 52832, 47440, and 83287
+#Question 12. I want a pairplot of the data and a heatmap. This is from lesson 3.14 and 3.15
+#We will use seaborn, and I reloaded the data just in case. The first part of this is creating the pairplot
+df_foodhuborder=pd.read_csv("foodhuborder.csv",sep=",")
+df_foodhuborder
+sns.pairplot(data=df_foodhuborder)
+plt.show()
+#import warnings
+#warnings.simplefilter(action='ignore', category=FutureWarning)
+#I was trying to get rid of the future warnings but it didn't work. The first part of the graph shows the pairplot.
+#Observation: I did not find a strong correlation in the pariplot. 
+/opt/anaconda3/lib/python3.11/site-packages/seaborn/_oldcore.py:1119: FutureWarning: use_inf_as_na option is deprecated and will be removed in a future version. Convert inf values to NaN before operating instead.
+  with pd.option_context('mode.use_inf_as_na', True):
+/opt/anaconda3/lib/python3.11/site-packages/seaborn/_oldcore.py:1119: FutureWarning: use_inf_as_na option is deprecated and will be removed in a future version. Convert inf values to NaN before operating instead.
+  with pd.option_context('mode.use_inf_as_na', True):
+/opt/anaconda3/lib/python3.11/site-packages/seaborn/_oldcore.py:1119: FutureWarning: use_inf_as_na option is deprecated and will be removed in a future version. Convert inf values to NaN before operating instead.
+  with pd.option_context('mode.use_inf_as_na', True):
+/opt/anaconda3/lib/python3.11/site-packages/seaborn/_oldcore.py:1119: FutureWarning: use_inf_as_na option is deprecated and will be removed in a future version. Convert inf values to NaN before operating instead.
+  with pd.option_context('mode.use_inf_as_na', True):
+/opt/anaconda3/lib/python3.11/site-packages/seaborn/_oldcore.py:1119: FutureWarning: use_inf_as_na option is deprecated and will be removed in a future version. Convert inf values to NaN before operating instead.
+  with pd.option_context('mode.use_inf_as_na', True):
+No description has been provided for this image
+#Question 12 continued (heatmap)
+#Next I want to see the heatmap. This code is used in lesson 3.14 and 3.15
+#The second part of this question is creating the heatmap. I want annot to be true, because I want to see the numbers
+#I want the cmap to be green, because it is easy on the eyes. 
+sns.heatmap(data=df_foodhuborder[['order_id', 'customer_id', 'cost_of_the_order', 'food_preparation_time',
+                                  'delivery_time']].corr(), cmap='Greens', annot=True);
+#plt.show()---I did not want to show this, but I still kept it, so the grader does not get confused. 
+#I think we want more than this, because there are no numbers for customer id, etc. 
+corr = df_foodhuborder.corr()
+sns.heatmap(corr, cmap="Greens", annot=True)
+plt.show()
+#Observation: Even though we did not get numbers for our heatmap, we still got shades of green. 
+#As you can tell, there are no dark greens (other than the same variables, i.e., order_id and order_id)
+#Therefore there are no strong or signficant relations or correlations between any of the variables. 
+---------------------------------------------------------------------------
+ValueError                                Traceback (most recent call last)
+Cell In[52], line 9
+      5 sns.heatmap(data=df_foodhuborder[['order_id', 'customer_id', 'cost_of_the_order', 'food_preparation_time',
+      6                                   'delivery_time']].corr(), cmap='Greens', annot=True);
+      7 #plt.show()---I did not want to show this, but I still kept it, so the grader does not get confused. 
+      8 #I think we want more than this, because there are no numbers for customer id, etc. 
+----> 9 corr = df_foodhuborder.corr()
+     10 sns.heatmap(corr, cmap="Greens", annot=True)
+     11 plt.show()
+
+File /opt/anaconda3/lib/python3.11/site-packages/pandas/core/frame.py:10704, in DataFrame.corr(self, method, min_periods, numeric_only)
+  10702 cols = data.columns
+  10703 idx = cols.copy()
+> 10704 mat = data.to_numpy(dtype=float, na_value=np.nan, copy=False)
+  10706 if method == "pearson":
+  10707     correl = libalgos.nancorr(mat, minp=min_periods)
+
+File /opt/anaconda3/lib/python3.11/site-packages/pandas/core/frame.py:1889, in DataFrame.to_numpy(self, dtype, copy, na_value)
+   1887 if dtype is not None:
+   1888     dtype = np.dtype(dtype)
+-> 1889 result = self._mgr.as_array(dtype=dtype, copy=copy, na_value=na_value)
+   1890 if result.dtype is not dtype:
+   1891     result = np.array(result, dtype=dtype, copy=False)
+
+File /opt/anaconda3/lib/python3.11/site-packages/pandas/core/internals/managers.py:1656, in BlockManager.as_array(self, dtype, copy, na_value)
+   1654         arr.flags.writeable = False
+   1655 else:
+-> 1656     arr = self._interleave(dtype=dtype, na_value=na_value)
+   1657     # The underlying data was copied within _interleave, so no need
+   1658     # to further copy if copy=True or setting na_value
+   1660 if na_value is lib.no_default:
+
+File /opt/anaconda3/lib/python3.11/site-packages/pandas/core/internals/managers.py:1715, in BlockManager._interleave(self, dtype, na_value)
+   1713     else:
+   1714         arr = blk.get_values(dtype)
+-> 1715     result[rl.indexer] = arr
+   1716     itemmask[rl.indexer] = 1
+   1718 if not itemmask.all():
+
+ValueError: could not convert string to float: 'Tamarind TriBeCa'
+No description has been provided for this image
+#Question 13: The company wants to provide a promo in the advertisement of restaraunts. The condition to get
+#to get the offer is that the restaraunts must have a rating count of more than 50 and the average rating >4. 
+#Find the restaraunts fulfilling the criteria. 
+#First we need to define the variables. 
+advertisement=df.copy()
+#This gives us a new dataset in which "Not Given" ratings are replaced w/0
+advertisement.rating.replace("Not given",0,inplace=True)
+#This changes or alters the ratings to numbers
+advertisement.rating=pd.to_numeric(df3.rating)
+#This code will take all the zero ratings and it should replace them with naans
+advertisement.rating.replace(0,np.nan,inplace=True)
+#This gives the numbers or orders w/non-naan ratings
+advertisement.rating.count()
+#Observation: There are a total of 1162 orders with naan ratings. 
+#Please continue, the answer is underneath line 232
+1162
+#The following is a boxplot of all the ratings from 3 to 5
+sns.countplot(data=advertisement,x='rating')
+plt.show()
+No description has been provided for this image
+restaurant_namerating=advertisement.groupby('restaurant_name')['rating'].mean().sort_values(ascending=False).reset_index()
+print(df4[df4.rating>=4])
+#Here in this code, we get the restaraunts with a mean rating that is 4 or higher. 
+#In this case we get 139 rows, or restaraunts that have a 4 or higher. 
+                   restaurant_name  rating
+0                       'wichcraft     5.0
+1             Ravagh Persian Grill     5.0
+2    Chola Eclectic Indian Cuisine     5.0
+3                      Chote Nawab     5.0
+4                           Junoon     5.0
+..                             ...     ...
+134                   Pongsri Thai     4.0
+135               Frank Restaurant     4.0
+136               Dirty Bird to Go     4.0
+137                      Rye House     4.0
+138                  DuMont Burger     4.0
+
+[139 rows x 2 columns]
+#returns the top-five restaurants by total number of orders with ratings
+df3.groupby('restaurant_name')['rating'].count().sort_values(ascending=False).reset_index().head()
+restaurant_name	rating
+0	Shake Shack	133
+1	The Meatball Shop	84
+2	Blue Ribbon Sushi	73
+3	Blue Ribbon Fried Chicken	64
+4	RedFarm Broadway	41
+#returns the mean rating of all orders placed at Shake Shack
+df3[df3['restaurant_name']=='Shake Shack'].rating.mean()
+4.2781954887218046
+#returns the mean rating of all orders placed at The Meatball Shop
+df3[df3['restaurant_name']=='The Meatball Shop'].rating.mean()
+4.511904761904762
+#returns the mean rating of all orders placed at Blue Ribbon Sushi
+df3[df3['restaurant_name']=='Blue Ribbon Sushi'].rating.mean()
+4.219178082191781
+#returns the mean rating of all orders placed at Blue Ribbon Fried Chicken
+df3[df3['restaurant_name']=='Blue Ribbon Fried Chicken'].rating.mean()
+4.328125
+#Observations for Question 13: In line 223, we find out that there are 139 restaraunts that have a mean rating  
+#of 4, or above.In Line 229, we notice that there are only 4 restaraunts that have 50 or more orders with the ratings. 
+#Therefore, while also examining the codes in line 215-216 and 231-232, we know that there are only 4 restaraunts
+#That meet the criteria, they are: Shake Shack, The Meatball Shop, and both the Blue Ribbon franchises, 
+#Sushi and Friend Chicken. 
+#Question #14: The company charges the restaraunt 25% on the orders having cost greater than $20 and 15% on the
+#orders having cost greater than $5. Find the net revenue generated by the company across all orders. 
+df4 = df[df.cost_of_the_order>20]
+First_amount = df4._cost_of_the_order.sum()*.25
+---------------------------------------------------------------------------
+NameError                                 Traceback (most recent call last)
+Cell In[1], line 3
+      1 #Question #14: The company charges the restaraunt 25% on the orders having cost greater than $20 and 15% on the
+      2 #orders having cost greater than $5. Find the net revenue generated by the company across all orders. 
+----> 3 df4 = df[df.cost_of_the_order>20]
+      4 First_amount = df4._cost_of_the_order.sum()*.25
+
+NameError: name 'df' is not defined
+# I got the above error, so what I did was I reloaded the dataset with definitions
+df=pd.read_csv("foodhub_order.csv",sep=",")
+df
+---------------------------------------------------------------------------
+NameError                                 Traceback (most recent call last)
+Cell In[3], line 1
+----> 1 df=pd.read_csv("foodhub_order.csv",sep=",")
+      2 df
+
+NameError: name 'pd' is not defined
+#I did not re-load the imports (for a lack of a better word)
+import matplotlib.pyplot as plt
+import seaborn as sns
+import pandas as pd
+df=pd.read_csv("foodhuborder.csv",sep=",")
+df
+order_id	customer_id	restaurant_name	cuisine_type	cost_of_the_order	day_of_the_week	rating	food_preparation_time	delivery_time
+0	1477224	147468	Tamarind TriBeCa	Indian	25.22	Weekday	3	20	24
+1	1476693	41877	Cafe Mogador	Middle Eastern	29.10	Weekday	5	20	29
+2	1476889	149984	Sushi of Gari 46	Japanese	12.18	Weekday	Not given	20	29
+3	1477999	208020	Haru Gramercy Park	Japanese	29.83	Weekday	5	20	32
+4	1477243	176234	Prosperity Dumpling	Chinese	14.02	Weekend	5	20	30
+...	...	...	...	...	...	...	...	...	...
+1893	1478268	306119	Xi'an Famous Foods	Chinese	20.86	Weekend	4	35	26
+1894	1476923	50199	J. G. Melon	American	19.40	Weekday	4	35	26
+1895	1478148	261371	Shake Shack	American	22.31	Weekend	Not given	35	28
+1896	1477377	198802	DuMont Burger	American	12.56	Weekend	Not given	35	19
+1897	1477466	222734	Shake Shack	American	13.97	Weekend	5	35	27
+1898 rows × 9 columns
+
+# I am going to copy and paste the question on here again. 
+#Question #14: The company charges the restaraunt 25% on the orders having cost greater than $20 and 15% on the
+#orders having cost greater than $5. Find the net revenue generated by the company across all orders. 
+#I want to first define my first amount, which is cost of the order greater than $20 w/25% gratiuty
+df4 = df[df.cost_of_the_order>20]
+First_amount = df4.cost_of_the_order.sum()*.25
+#Next I want to define the orders that are greater than $5 w/15% gratuity.
+#I need to make sure that this second definition has the less than and equal to sign. 
+#I want to make sure of this because, my first order did not include $20
+df5=df[df.cost_of_the_order<=20]
+Second_amount = df5[df5.cost_of_the_order>5].cost_of_the_order.sum()*.15
+#Now because everything is defined, I can go ahead and figure out my net revenue
+#This should be easy, the equation should be my first amount + second amount
+net_revenue = First_amount + Second_amount
+print(net_revenue)
+#Observation or Answer: our net revenue is $6,166.30
+6166.303
+#Question 15: The company wants to analyze the total time required to deliver the food. What percentage of orders
+#take more than 1 hour or 60 minutes to get delivered from the time the order is placed. (The food has to be 
+#prepared and then delivered)
+#We need to create a dataframe where "y"='total time or TT' and "x" is equal to time for food_preparation_time
+#+ time for delivery_time
+df['TT']=df['food_preparation_time']+df['delivery_time']
+round(len(df[df.TT>60])/len(df)*100,1)
+#This took me a second to figure out, I initially had the df= and then my TT, which is wrong. 
+#Observation or Answer: 10.5% of the customers orders >1 hour in delivery time. 
+10.5
+#Question 16: The company wants to analyze the delivery time of the orders on weekdays and weekends. 
+#How does the mean delivery time vary during weekdays and weekends?
+#First lets create a dataframe for orders on the weekdays
+df6=df[df.day_of_the_week=='Weekday']
+#Second lets create a DF for orders on the weekends
+df7=df[df.day_of_the_week=='Weekend']
+#After we created and defined our DF, we must get the delivery times of both weekdays and weekends. 
+#This is mean delivery time of weekday order
+weekday_delivery_time=df6.delivery_time.mean()
+#Then I want to print the delivery time for weekday (mean)
+print(weekday_delivery_time)
+#The mean delivery time for weekdays is 28.34 minutes
+28.340036563071298
+#This is the mean delivery time for weekend order
+weekend_delivery_time=df7.delivery_time.mean()
+#I want to print the delivery time for weekend (mean)
+print(weekend_delivery_time)
+22.4700222057735
+#The mean delivery time for weekends is 22.47 minutes. 
+#Observation: the mean delivery time for weekdays is 6 minutes longer than weekends (28.34 minutes vs 22.47)
+#Question 17: What are your conclusions from the analysis? What recommendations would you like to share
+#to help improve the business?
+#1) I would hire more drivers on the weekdays because the mean delivery time is six minutes longer. 
+#2) Even though we have double of the amount of orders on the weekends, food prep still takes around the same time
+#on both weekdays and weekends. I would keep the staff porpotionate to the number of orders. 
+#3) American, Japanese, and Italian are the most popular foods on the weekends. 
+#4) More ratings are given out on weekends than weekdays. 
+#5) There is positive correlation between price or cost and food rating. 
+#6) Indian, Middle Eastern and Japanese food had the highest cuisine rating of food. 
+ 
